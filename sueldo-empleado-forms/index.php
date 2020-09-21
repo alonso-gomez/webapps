@@ -7,7 +7,7 @@
 </head>
 <body>
 	<h1>Sueldo de un empleado con formularios</h1>
-	<p>Captura los siguientes datos para calcular el sueldo del trabajador.</p>
+	<p>Captura los siguientes datos para calcular el sueldo del trabajadorsssss.</p>
 
 	<form action="procesamiento.php" method="post">
 		<label for="nombre">Nombre:</label>
