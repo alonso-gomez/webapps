@@ -1,4 +1,5 @@
 <?php
+  // Hice este comentario
   function printMsg($msg){
     if(is_array($msg)){
       echo "<ul>";
