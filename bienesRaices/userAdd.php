@@ -1,9 +1,17 @@
 <?php
+  include("connections/conn_localhost.php");
+  include("includes/common_functions.php");
+
   // Lo primero que haremos será validar si el formulario ha sido enviado
   if(isset($_POST['userAddSent'])) {
     // Vamos a validar que no existan cajas vacias
     foreach($_POST as $calzon => $caca) {
       if($caca == '' && $calzon != "telefono") $error[] = "La caja $calzon es requerida";
+    }
+
+    // Procedemos a añadir a la base de datos al usuario SOLO SI NO HAY ERRORES
+    if(!isset($error)) {
+
     }
 
   }
@@ -50,9 +58,9 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the form below to add a new user.</p>
 
   <?php
-    if(isset($error)) print_r($error);
+    if(isset($error)) printMsg($error, "error");
+    print_r($connLocalhost)
   ?>
-
   <form action="userAdd.php" method="post">
     <table cellpadding="3">
       <tr>
@@ -79,8 +87,8 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
         <td><label for="rol">Role:*</label></td>
         <td>
           <select name="rol">
-            <option value="agente" selected="selected">Agent</option>
-            <option value="admin">Administrator</option>
+            <option value="agente" <?php if(isset($_POST['rol']) && $_POST['rol'] == "agente") echo 'selected="selected"'; ?>>Agent</option>
+            <option value="admin" <?php if(isset($_POST['rol']) && $_POST['rol'] == "admin") echo 'selected="selected"'; ?>>Administrator</option>
           </select>  
         </td>
       </tr>

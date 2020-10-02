@@ -625,6 +625,13 @@ h4 {
 	border: solid 1px #FFCC00;	
 }
 
+.death {
+	padding: 8px;
+	background: #666;
+	border: solid 1px #000;	
+	color: #fff;
+}
+
 .listadoUsuarios {
 	margin: 0;
 	padding: 0;
