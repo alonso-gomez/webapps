@@ -1,12 +1,12 @@
 <?php
 // Definimos variables con los datos necesarios para la conexión
-$servidor = "localhost";
+$servidor = "localhost"; // Puede ser una ubicación remota
 $baseDatos = "bienesRaices";
 $usuarioBd = "root";
 $passwordBd = "iswug";
 
 // Creamos la conexión
-$connLocalhost = mysqli_connect($servidor, $usuarioBd, $passwordBd) or trigger_error(mysql_error(), E_USER_ERROR);
+$connLocalhost = mysqli_connect($servidor, $usuarioBd, $passwordBd) or trigger_error(mysqli_error(), E_USER_ERROR);
 
 // Definimos el cotejamiento para la conexion (igual al cotejamiento de la BD)
 mysqli_query($connLocalhost, "SET NAMES 'utf8'");

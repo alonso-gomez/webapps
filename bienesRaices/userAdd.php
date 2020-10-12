@@ -11,7 +11,21 @@
 
     // Procedemos a añadir a la base de datos al usuario SOLO SI NO HAY ERRORES
     if(!isset($error)) {
+      // Preparamos la consulta para guardar el registro en la BD
+      $queryInsertUser = sprintf("INSERT INTO usuarios (nombre, apellidos, email, password, telefono, rol) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+          mysqli_real_escape_string($connLocalhost, trim($_POST['nombre'])),
+          mysqli_real_escape_string($connLocalhost, trim($_POST['apellidos'])),
+          mysqli_real_escape_string($connLocalhost, trim($_POST['email'])),
+          mysqli_real_escape_string($connLocalhost, trim($_POST['password'])),
+          mysqli_real_escape_string($connLocalhost, trim($_POST['telefono'])),
+          mysqli_real_escape_string($connLocalhost, trim($_POST['rol']))
+      );
 
+      // Ejecutamos el query en la BD
+      mysqli_query($connLocalhost, $queryInsertUser) or trigger_error("El query de inserción de usuarios falló");
+
+      // Redireccionamos al usuario al Panel de Control
+      header("Location: cpanel.php?insertUser=true");
     }
 
   }
@@ -50,7 +64,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 <!-- HEADER END -->
 
 
-<div class="txt_navbar" id="navbar"><strong>You are here:</strong> Home
+<div class="txt_navbar" id="navbar"><strong>You are here:</strong> <a href="index.php">Home</a> &raquo; <a href="cpanel.php">Control Panel</a> &raquo; User Add
 </div>
 
 <div id="content" class="txt_content">
@@ -58,8 +72,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the form below to add a new user.</p>
 
   <?php
-    if(isset($error)) printMsg($error, "error");
-    print_r($connLocalhost)
+    if(isset($error)) printMsg($error, "error");  
   ?>
   <form action="userAdd.php" method="post">
     <table cellpadding="3">
