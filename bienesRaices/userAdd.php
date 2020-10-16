@@ -9,6 +9,14 @@
       if($caca == '' && $calzon != "telefono") $error[] = "La caja $calzon es requerida";
     }
 
+    // Validación de passwords coincidentes
+    if($_POST['password'] != $_POST['password2']){
+      $error[] = "Los passwords no son coincidentes";
+    }
+
+    // Validación de email
+    
+
     // Procedemos a añadir a la base de datos al usuario SOLO SI NO HAY ERRORES
     if(!isset($error)) {
       // Preparamos la consulta para guardar el registro en la BD
@@ -91,6 +99,10 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
       <tr>
         <td><label for="password">Pasword:*</label></td>
         <td><input type="password" name="password"></td>
+      </tr>
+      <tr>
+        <td><label for="password2">Repeat pasword:*</label></td>
+        <td><input type="password" name="password2"></td>
       </tr>
       <tr>
         <td><label for="telefono">Telephone:</label></td>
