@@ -15,7 +15,18 @@
     }
 
     // Validación de email
-    
+    // Preparamos la consulta para determinar si el email porporcionado ya existe en la BD
+    $queryCheckEmail = sprintf("SELECT id FROM usuarios WHERE email = '%s'",
+      mysqli_real_escape_string($connLocalhost, trim($_POST['email']))
+    );
+
+    // Ejecutamos el query 
+    $resQueryCheckEmail = mysqli_query($connLocalhost, $queryCheckEmail) or trigger_error("El query de validación de email falló"); // Record set o result set siempre y cuando el query sea de tipo SELECT
+
+    // Contar el recordset para determinar si se encontró el correo en la BD
+    if(mysqli_num_rows($resQueryCheckEmail)) {
+      $error[] = "El correo proporcionado ya está siendo utilizado";
+    }
 
     // Procedemos a añadir a la base de datos al usuario SOLO SI NO HAY ERRORES
     if(!isset($error)) {
@@ -80,7 +91,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the form below to add a new user.</p>
 
   <?php
-    if(isset($error)) printMsg($error, "error");  
+    if(isset($error)) printMsg($error, "error"); 
   ?>
   <form action="userAdd.php" method="post">
     <table cellpadding="3">
