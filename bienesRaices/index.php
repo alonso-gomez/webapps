@@ -1,3 +1,13 @@
+<?php
+  // Inicializamos la sesion o la retomamos
+  if(!isset($_SESSION)) {
+    session_start();
+  }
+
+  // Incluimos la conexión a la base de datos
+  include("connections/conn_localhost.php");
+  include("includes/common_functions.php");
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>

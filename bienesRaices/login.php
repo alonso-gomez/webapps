@@ -2,6 +2,8 @@
   // Inicializamos la sesion o la retomamos
   if(!isset($_SESSION)) {
     session_start();
+    // Protegemos el documento para que solamente sea visible cuando NO HAS INICIADO sesión
+    if(isset($_SESSION['userId'])) header('Location: cpanel.php');
   }
 
   // Incluimos la conexión a la base de datos
@@ -16,7 +18,7 @@
     }
 
     // Armamos el query para verificar el email y el password en la base de datos
-    $queryLogin = sprintf("SELECT nombre, apellidos, email FROM usuarios WHERE email = '%s' AND password = '%s'",
+    $queryLogin = sprintf("SELECT id, nombre, apellidos, email FROM usuarios WHERE email = '%s' AND password = '%s'",
         mysqli_real_escape_string($connLocalhost, trim($_POST['email'])),
         mysqli_real_escape_string($connLocalhost, trim($_POST['password']))
     );
@@ -30,9 +32,17 @@
       // Hacemos un fetch del recordset
       $userData = mysqli_fetch_assoc($resQueryLogin);
 
-
       // Definimos variables de sesion en $_SESSION
-      //$_SESSION['user_fullname'] = $
+      $_SESSION['userId'] = $userData['id'];
+      $_SESSION['userFullname'] = $userData['nombre']." ".$userData['apellidos'];
+      $_SESSION['userEmail'] = $userData['email'];
+
+      // Redireccionamos al usuario al panel de control
+      header('Location: cpanel.php');
+
+    }
+    else {
+      $error = "Login failed";
     }
 
   }
@@ -76,7 +86,8 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 
   <?php
     if(isset($error)) printMsg($error, "error");
-    print_r($userData); 
+    if(isset($_GET["auth"])) printMsg("We're sorry... You need to login first!", "announce");
+    if(isset($_GET["loggedOff"])) printMsg("Bye bye :)", "exito");
   ?>
 
   <form action="login.php" method="post">

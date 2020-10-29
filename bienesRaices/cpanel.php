@@ -1,4 +1,11 @@
 <?php
+  // Inicializamos la sesion o la retomamos
+  if(!isset($_SESSION)) {
+    session_start();
+    // Protegemos el documento para que solamente sea visible cuando HAS INICIADO sesión
+    if(!isset($_SESSION['userId'])) header('Location: login.php?auth=false');
+  }
+
   include("connections/conn_localhost.php");
   include("includes/common_functions.php");
 
@@ -41,7 +48,8 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the options below to manage user and properties.</p>
 
   <?php
-    if(isset($_GET['insertUser'])) printMsg("The user was succesfully added.", "exito")  
+    if(isset($_GET['insertUser'])) printMsg("The user was succesfully added.", "exito");
+    print_r($_SESSION);
   ?>
 
   <h3>Properties</h3>
