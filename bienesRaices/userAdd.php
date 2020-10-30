@@ -1,4 +1,12 @@
 <?php
+  // Inicializamos la sesion o la retomamos
+  if(!isset($_SESSION)) {
+    session_start();
+    // Protegemos el documento para que solamente sea visible cuando HAS INICIADO sesión
+    if(!isset($_SESSION['userId'])) header('Location: login.php?auth=false');
+    if($_SESSION['userRole'] != "admin") header('Location: cpanel.php?forbidden=true');
+  }
+
   include("connections/conn_localhost.php");
   include("includes/common_functions.php");
 

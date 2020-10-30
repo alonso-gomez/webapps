@@ -49,21 +49,31 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 
   <?php
     if(isset($_GET['insertUser'])) printMsg("The user was succesfully added.", "exito");
-    print_r($_SESSION);
+    if(isset($_GET['forbidden'])) printMsg("You don't have enough authorization to access this resource.", "announce");
+    //print_r($_SESSION);
   ?>
+
+  <h3>My profile</h3>
+  <ul>
+    <li><a href="userUpdate.php">Edit my profile</a></li>
+  </ul>
 
   <h3>Properties</h3>
   <ul>
     <li><a href="">Add property</a></li>
     <li><a href="">Manage my properties</a></li>
+    <?php if($_SESSION['userRole'] == "admin") { ?>
     <li><a href="">Manage other users properties</a></li>
+    <?php } ?>
   </ul>
 
+  <?php if($_SESSION['userRole'] == "admin") { ?>
   <h3>Users</h3>
   <ul>
     <li><a href="userAdd.php">Add user</a></li>
     <li><a href="">Manage users</a></li>
   </ul>
+  <?php } ?>
 
   <h3>Search</h3>
   <p>Use the search box below to quickly find a property.</p>

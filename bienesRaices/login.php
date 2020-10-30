@@ -18,7 +18,7 @@
     }
 
     // Armamos el query para verificar el email y el password en la base de datos
-    $queryLogin = sprintf("SELECT id, nombre, apellidos, email FROM usuarios WHERE email = '%s' AND password = '%s'",
+    $queryLogin = sprintf("SELECT id, nombre, apellidos, email, rol FROM usuarios WHERE email = '%s' AND password = '%s'",
         mysqli_real_escape_string($connLocalhost, trim($_POST['email'])),
         mysqli_real_escape_string($connLocalhost, trim($_POST['password']))
     );
@@ -36,6 +36,7 @@
       $_SESSION['userId'] = $userData['id'];
       $_SESSION['userFullname'] = $userData['nombre']." ".$userData['apellidos'];
       $_SESSION['userEmail'] = $userData['email'];
+      $_SESSION['userRole'] = $userData['rol'];
 
       // Redireccionamos al usuario al panel de control
       header('Location: cpanel.php');
