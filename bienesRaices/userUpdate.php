@@ -4,15 +4,22 @@
     session_start();
     // Protegemos el documento para que solamente sea visible cuando HAS INICIADO sesión
     if(!isset($_SESSION['userId'])) header('Location: login.php?auth=false');
-    // En el caso de este documento que es solo par admin, evaluamos el rol del usuario para determinar "si no es admin", en ese caso lo sacamos del documento
-    if($_SESSION['userRole'] != "admin") header('Location: cpanel.php?forbidden=true');
   }
 
   include("connections/conn_localhost.php");
   include("includes/common_functions.php");
 
+  // Recuperamos los datos del usuario tomando la referencia de $_SESSION
+  $queryLoggedUserDetail = "SELECT * FROM usuarios WHERE id = {$_SESSION['userId']}";
+
+  // Ejecutamos el query
+  $resQueryLoggedUserDetail = mysqli_query($connLocalhost, $queryLoggedUserDetail) or trigger_error("El query para obtener los detalles del usuario loggeado falló");
+
+  // Hacemos un fetch del resultado obtenido
+  $loggedUserDetail = mysqli_fetch_assoc($resQueryLoggedUserDetail);
+
   // Lo primero que haremos será validar si el formulario ha sido enviado
-  if(isset($_POST['userAddSent'])) {
+  if(isset($_POST['userUpdateSent'])) {
     // Vamos a validar que no existan cajas vacias
     foreach($_POST as $calzon => $caca) {
       if($caca == '' && $calzon != "telefono") $error[] = "La caja $calzon es requerida";
@@ -23,37 +30,10 @@
       $error[] = "Los passwords no son coincidentes";
     }
 
-    // Validación de email
-    // Preparamos la consulta para determinar si el email porporcionado ya existe en la BD
-    $queryCheckEmail = sprintf("SELECT id FROM usuarios WHERE email = '%s'",
-      mysqli_real_escape_string($connLocalhost, trim($_POST['email']))
-    );
-
-    // Ejecutamos el query 
-    $resQueryCheckEmail = mysqli_query($connLocalhost, $queryCheckEmail) or trigger_error("El query de validación de email falló"); // Record set o result set siempre y cuando el query sea de tipo SELECT
-
-    // Contar el recordset para determinar si se encontró el correo en la BD
-    if(mysqli_num_rows($resQueryCheckEmail)) {
-      $error[] = "El correo proporcionado ya está siendo utilizado";
-    }
-
     // Procedemos a añadir a la base de datos al usuario SOLO SI NO HAY ERRORES
     if(!isset($error)) {
       // Preparamos la consulta para guardar el registro en la BD
-      $queryInsertUser = sprintf("INSERT INTO usuarios (nombre, apellidos, email, password, telefono, rol) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
-          mysqli_real_escape_string($connLocalhost, trim($_POST['nombre'])),
-          mysqli_real_escape_string($connLocalhost, trim($_POST['apellidos'])),
-          mysqli_real_escape_string($connLocalhost, trim($_POST['email'])),
-          mysqli_real_escape_string($connLocalhost, trim($_POST['password'])),
-          mysqli_real_escape_string($connLocalhost, trim($_POST['telefono'])),
-          mysqli_real_escape_string($connLocalhost, trim($_POST['rol']))
-      );
-
-      // Ejecutamos el query en la BD
-      mysqli_query($connLocalhost, $queryInsertUser) or trigger_error("El query de inserción de usuarios falló");
-
-      // Redireccionamos al usuario al Panel de Control
-      header("Location: cpanel.php?insertUser=true");
+      
     }
 
   }
@@ -67,7 +47,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>My San Carlos Vacation, San Carlos Property Rentals - Home page</title>
+<title>My San Carlos Vacation, San Carlos Property Rentals - Edit my profile</title>
 
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
 
@@ -92,17 +72,18 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 <!-- HEADER END -->
 
 
-<div class="txt_navbar" id="navbar"><strong>You are here:</strong> <a href="index.php">Home</a> &raquo; <a href="cpanel.php">Control Panel</a> &raquo; User Add
+<div class="txt_navbar" id="navbar"><strong>You are here:</strong> <a href="index.php">Home</a> &raquo; <a href="cpanel.php">Control Panel</a> &raquo; Edit my profile
 </div>
 
 <div id="content" class="txt_content">
-  <h2>User Add</h2>
-  <p>Please use the form below to add a new user.</p>
+  <h2>Edit my profile</h2>
+  <p>Please use the form below to update your profile.</p>
 
   <?php
     if(isset($error)) printMsg($error, "error"); 
+    print_r($loggedUserDetail);
   ?>
-  <form action="userAdd.php" method="post">
+  <form action="userUpdate.php" method="post">
     <table cellpadding="3">
       <tr>
         <td><label for="nombre">Name:*</label></td>
@@ -139,7 +120,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
       </tr>
       <tr>
         <td></td>
-        <td><br><input type="submit" value="Save User" name="userAddSent"></td>
+        <td><br><input type="submit" value="Update User" name="userUpdateSent"></td>
       </tr>
     </table>
   </form>
