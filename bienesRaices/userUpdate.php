@@ -33,7 +33,20 @@
     // Procedemos a añadir a la base de datos al usuario SOLO SI NO HAY ERRORES
     if(!isset($error)) {
       // Preparamos la consulta para guardar el registro en la BD
-      
+      $queryUpdateUser = sprintf("UPDATE usuarios SET nombre = '%s', apellidos = '%s', password = '%s', telefono = '%s' WHERE id = {$_SESSION['userId']}",
+        mysqli_real_escape_string($connLocalhost, trim($_POST['nombre'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['apellidos'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['password'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['telefono']))
+      );
+
+      // Ejecutamos el query
+      $resQueryUserUpdate = mysqli_query($connLocalhost, $queryUpdateUser) or trigger_error("El query de actualización de usuario falló");
+
+      // Evaluamos el resultado de la ejecución del query
+      if($resQueryUserUpdate) {
+        header("Location: userUpdate.php?updatedProfile=true");
+      }
     }
 
   }
@@ -80,26 +93,26 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the form below to update your profile.</p>
 
   <?php
-    if(isset($error)) printMsg($error, "error"); 
-    print_r($loggedUserDetail);
+    if(isset($error)) printMsg($error, "error");
+    if(isset($_GET['updatedProfile'])) printMsg("Your user profile has been updated", "exito");
   ?>
   <form action="userUpdate.php" method="post">
     <table cellpadding="3">
       <tr>
         <td><label for="nombre">Name:*</label></td>
-        <td><input type="text" name="nombre" value="<?php if(isset($_POST['nombre'])) echo $_POST['nombre']; ?>"></td>
+        <td><input type="text" name="nombre" value="<?php echo $loggedUserDetail['nombre']; ?>"></td>
       </tr>
       <tr>
         <td><label for="apellidos">Last name:*</label></td>
-        <td><input type="text" name="apellidos" value="<?php if(isset($_POST['apellidos'])) echo $_POST['apellidos']; ?>"></td>
+        <td><input type="text" name="apellidos" value="<?php echo $loggedUserDetail['apellidos']; ?>"></td>
       </tr>
       <tr>
         <td><label for="email">Email:*</label></td>
-        <td><input type="text" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email']; ?>"></td>
+        <td><input type="text" name="email" value="<?php echo $loggedUserDetail['email']; ?>" disabled></td>
       </tr>
       <tr>
         <td><label for="password">Pasword:*</label></td>
-        <td><input type="password" name="password"></td>
+        <td><input type="password" name="password" value="<?php echo $loggedUserDetail['password']; ?>"></td>
       </tr>
       <tr>
         <td><label for="password2">Repeat pasword:*</label></td>
@@ -107,16 +120,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
       </tr>
       <tr>
         <td><label for="telefono">Telephone:</label></td>
-        <td><input type="text" name="telefono" value="<?php if(isset($_POST['telefono'])) echo $_POST['telefono']; ?>"></td>
-      </tr>
-      <tr>
-        <td><label for="rol">Role:*</label></td>
-        <td>
-          <select name="rol">
-            <option value="agente" <?php if(isset($_POST['rol']) && $_POST['rol'] == "agente") echo 'selected="selected"'; ?>>Agent</option>
-            <option value="admin" <?php if(isset($_POST['rol']) && $_POST['rol'] == "admin") echo 'selected="selected"'; ?>>Administrator</option>
-          </select>  
-        </td>
+        <td><input type="text" name="telefono" value="<?php echo $loggedUserDetail['telefono']; ?>"></td>
       </tr>
       <tr>
         <td></td>

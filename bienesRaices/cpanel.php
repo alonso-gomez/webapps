@@ -55,7 +55,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 
   <h3>My profile</h3>
   <ul>
-    <li><a href="userUpdate.php?userId=<?php echo $_SESSION['userId']; ?>">Edit my profile</a></li>
+    <li><a href="userUpdate.php">Edit my profile</a></li>
   </ul>
 
   <h3>Properties</h3>
