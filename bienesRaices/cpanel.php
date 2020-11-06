@@ -71,7 +71,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <h3>Users</h3>
   <ul>
     <li><a href="userAdd.php">Add user</a></li>
-    <li><a href="">Manage users</a></li>
+    <li><a href="userManagement.php">Manage users</a></li>
   </ul>
   <?php } ?>
 
