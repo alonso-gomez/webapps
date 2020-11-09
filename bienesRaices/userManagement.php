@@ -77,7 +77,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
     do { ?>
     <li>
       <p class="nombreUsuario"><?php echo $usersData['nombre']." ".$usersData['apellidos']; ?> | <?php echo $usersData['email']; ?></p>
-      <p class="accionesUsuario"><a href="">Editar</a> | <a href="">Eliminar</a></p>
+      <p class="accionesUsuario"><a href="userUpdateAdmin.php?userId=<?php echo $usersData['id']; ?>">Editar</a> | <a href="">Eliminar</a></p>
     </li>
     <?php 
     } while ($usersData = mysqli_fetch_assoc($resQueryGetUsers));
