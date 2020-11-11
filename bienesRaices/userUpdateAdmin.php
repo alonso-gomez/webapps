@@ -11,6 +11,9 @@
   include("connections/conn_localhost.php");
   include("includes/common_functions.php");
 
+  // Redirigimos al usuario si no está definido userId en GET
+  if(!isset($_GET['userId'])) header("Location: userManagement.php");
+
   // Recuperamos los datos del usuario tomando la referencia de $_SESSION
   $queryUserData = sprintf("SELECT * FROM usuarios WHERE id = %d",
     mysqli_real_escape_string($connLocalhost, trim($_GET['userId']))
@@ -29,19 +32,16 @@
       if($caca == '' && $calzon != "telefono") $error[] = "La caja $calzon es requerida";
     }
 
-    // Validación de passwords coincidentes
-    if($_POST['password'] != $_POST['password2']){
-      $error[] = "Los passwords no son coincidentes";
-    }
-
     // Procedemos a añadir a la base de datos al usuario SOLO SI NO HAY ERRORES
     if(!isset($error)) {
       // Preparamos la consulta para guardar el registro en la BD
-      $queryUpdateUser = sprintf("UPDATE usuarios SET nombre = '%s', apellidos = '%s', password = '%s', telefono = '%s' WHERE id = {$_SESSION['userId']}",
+      $queryUpdateUser = sprintf("UPDATE usuarios SET nombre = '%s', apellidos = '%s', password = '%s', telefono = '%s', rol = '%s' WHERE id = %d",
         mysqli_real_escape_string($connLocalhost, trim($_POST['nombre'])),
         mysqli_real_escape_string($connLocalhost, trim($_POST['apellidos'])),
         mysqli_real_escape_string($connLocalhost, trim($_POST['password'])),
-        mysqli_real_escape_string($connLocalhost, trim($_POST['telefono']))
+        mysqli_real_escape_string($connLocalhost, trim($_POST['telefono'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['rol'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['userId']))
       );
 
       // Ejecutamos el query
@@ -49,7 +49,7 @@
 
       // Evaluamos el resultado de la ejecución del query
       if($resQueryUserUpdate) {
-        header("Location: userUpdate.php?updatedProfile=true");
+        header("Location: userUpdateAdmin.php?userId=".$_POST['userId']."&updatedProfile=true");
       }
     }
 
@@ -98,9 +98,9 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 
   <?php
     if(isset($error)) printMsg($error, "error");
-    if(isset($_GET['updatedProfile'])) printMsg("Your user profile has been updated", "exito");
+    if(isset($_GET['updatedProfile'])) printMsg("The user profile has been updated", "exito");
   ?>
-  <form action="userUpdate.php" method="post">
+  <form action="userUpdateAdmin.php" method="post">
     <table cellpadding="3">
       <tr>
         <td><label for="nombre">Name:*</label></td>
@@ -119,10 +119,6 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
         <td><input type="password" name="password" value="<?php echo $userData['password']; ?>"></td>
       </tr>
       <tr>
-        <td><label for="password2">Repeat pasword:*</label></td>
-        <td><input type="password" name="password2"></td>
-      </tr>
-      <tr>
         <td><label for="telefono">Telephone:</label></td>
         <td><input type="text" name="telefono" value="<?php echo $userData['telefono']; ?>"></td>
       </tr>
@@ -136,7 +132,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
         </td>
       </tr>
       <tr>
-        <td></td>
+        <td><input type="hidden" name="userId" value="<?php echo $userData['id']; ?>"></td>
         <td><br><input type="submit" value="Update User" name="userUpdateSent"></td>
       </tr>
     </table>
