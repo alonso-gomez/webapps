@@ -68,6 +68,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
     if(isset($error)) printMsg($error, "error");
     if(isset($_GET["auth"])) printMsg("We're sorry... You need to login first!", "announce");
     if(isset($_GET["loggedOff"])) printMsg("Bye bye :)", "exito");
+    if(isset($_GET["deletedUser"])) printMsg("The user was deleted succesfully", "exito");
   ?>
 
   <p>Total users: <?php echo $totalUsers; ?></p>
@@ -77,7 +78,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
     do { ?>
     <li>
       <p class="nombreUsuario"><?php echo $usersData['nombre']." ".$usersData['apellidos']; ?> | <?php echo $usersData['email']; ?></p>
-      <p class="accionesUsuario"><a href="userUpdateAdmin.php?userId=<?php echo $usersData['id']; ?>">Editar</a> | <a href="">Eliminar</a></p>
+      <p class="accionesUsuario"><a href="userUpdateAdmin.php?userId=<?php echo $usersData['id']; ?>">Editar</a> | <a href="userDelete.php?userId=<?php echo $usersData['id']; ?>">Eliminar</a></p>
     </li>
     <?php 
     } while ($usersData = mysqli_fetch_assoc($resQueryGetUsers));

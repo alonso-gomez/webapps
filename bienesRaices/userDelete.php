@@ -26,31 +26,19 @@
   $userData = mysqli_fetch_assoc($resQueryUserData);
 
   // Lo primero que haremos será validar si el formulario ha sido enviado
-  if(isset($_POST['userUpdateSent'])) {
-    // Vamos a validar que no existan cajas vacias
-    foreach($_POST as $calzon => $caca) {
-      if($caca == '' && $calzon != "telefono") $error[] = "La caja $calzon es requerida";
-    }
+  if(isset($_POST['userDeleteSent'])) {
 
-    // Procedemos a añadir a la base de datos al usuario SOLO SI NO HAY ERRORES
-    if(!isset($error)) {
-      // Preparamos la consulta para guardar el registro en la BD
-      $queryUpdateUser = sprintf("UPDATE usuarios SET nombre = '%s', apellidos = '%s', password = '%s', telefono = '%s', rol = '%s' WHERE id = %d",
-        mysqli_real_escape_string($connLocalhost, trim($_POST['nombre'])),
-        mysqli_real_escape_string($connLocalhost, trim($_POST['apellidos'])),
-        mysqli_real_escape_string($connLocalhost, trim($_POST['password'])),
-        mysqli_real_escape_string($connLocalhost, trim($_POST['telefono'])),
-        mysqli_real_escape_string($connLocalhost, trim($_POST['rol'])),
-        mysqli_real_escape_string($connLocalhost, trim($_POST['userId']))
-      );
+    // Preparamos la consulta para guardar el registro en la BD
+    $queryUserDelete = sprintf("DELETE FROM usuarios WHERE id = %d",
+      mysqli_real_escape_string($connLocalhost, trim($_POST['userId']))
+    );
 
-      // Ejecutamos el query
-      $resQueryUserUpdate = mysqli_query($connLocalhost, $queryUpdateUser) or trigger_error("El query de actualización de usuario falló");
+    // Ejecutamos el query
+    $resQueryUserDelete = mysqli_query($connLocalhost, $queryUserDelete) or trigger_error("El query de eliminar usuario falló");
 
-      // Evaluamos el resultado de la ejecución del query
-      if($resQueryUserUpdate) {
-        header("Location: userUpdateAdmin.php?userId=".$_POST['userId']."&updatedProfile=true");
-      }
+    // Evaluamos el resultado de la ejecución del query
+    if($resQueryUserDelete) {
+      header("Location: userManagement.php?deletedUser=true");
     }
 
   }
@@ -64,7 +52,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>My San Carlos Vacation, San Carlos Property Rentals - Edit other users profiles</title>
+<title>My San Carlos Vacation, San Carlos Property Rentals - Delete Users</title>
 
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
 
@@ -89,18 +77,18 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 <!-- HEADER END -->
 
 
-<div class="txt_navbar" id="navbar"><strong>You are here:</strong> <a href="index.php">Home</a> &raquo; <a href="cpanel.php">Control Panel</a> &raquo; <a href="userManagement.php">Manage Users</a> &raquo; Update other users profiles
+<div class="txt_navbar" id="navbar"><strong>You are here:</strong> <a href="index.php">Home</a> &raquo; <a href="cpanel.php">Control Panel</a> &raquo; <a href="userManagement.php">Manage Users</a> &raquo; User Delete
 </div>
 
 <div id="content" class="txt_content">
-  <h2>Update other users profiles</h2>
+  <h2>User Delete</h2>
   <p>Please use the form below to update other users profiles.</p>
 
   <?php
     if(isset($error)) printMsg($error, "error");
     if(isset($_GET['updatedProfile'])) printMsg("The user profile has been updated", "exito");
   ?>
-  <form action="userUpdateAdmin.php" method="post">
+  <form action="userDelete.php" method="post">
     <table cellpadding="3">
       <tr>
         <td><label for="nombre">Name:*</label></td>
@@ -133,7 +121,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
       </tr>
       <tr>
         <td><input type="hidden" name="userId" value="<?php echo $userData['id']; ?>"></td>
-        <td><br><input type="submit" value="Update User" name="userUpdateSent"></td>
+        <td><br><input type="submit" value="Delete User" name="userDeleteSent"></td>
       </tr>
     </table>
   </form>
