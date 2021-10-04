@@ -34,48 +34,59 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <h2>User register</h2>
   <p>Use the form below to register a new user.</p>
 
-  <table>
-    <tr>
-      <td>
-        <label for="name">Name:*</label>
-      </td>
-      <td><input type="text" name="name"></td>
-    </tr>
-    <tr>
-      <td>
-        <label for="lastname">Lastname:*</label>
-      </td>
-      <td><input type="text" name="lastname"></td>
-    </tr>
-    <tr>
-      <td>
-        <label for="email">Email:*</label>
-      </td>
-      <td><input type="text" name="email"></td>
-    </tr>
-    <tr>
-      <td>
-        <label for="password">Password:*</label>
-      </td>
-      <td><input type="text" name="password"></td>
-    </tr>
-    <tr>
-      <td>
-        <label for="phone">Phone:</label>
-      </td>
-      <td><input type="text" name="phone"></td>
-    </tr>
-    <tr>
-      <td>
-        <label for="role">Role:</label>
-      </td>
-      <td><input type="text" name="role"></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><input type="submit"></td>
-    </tr>
-  </table>
+  <form action="user-register.php" method="post">
+    <table>
+      <tr>
+        <td>
+          <label for="name">Name:*</label>
+        </td>
+        <td><input type="text" name="name"></td>
+      </tr>
+      <tr>
+        <td>
+          <label for="lastname">Lastname:*</label>
+        </td>
+        <td><input type="text" name="lastname"></td>
+      </tr>
+      <tr>
+        <td>
+          <label for="email">Email:*</label>
+        </td>
+        <td><input type="text" name="email"></td>
+      </tr>
+      <tr>
+        <td>
+          <label for="password">Password:*</label>
+        </td>
+        <td><input type="password" name="password"></td>
+      </tr>
+      <tr>
+        <td>
+          <label for="phone">Phone:</label>
+        </td>
+        <td><input type="text" name="phone"></td>
+      </tr>
+      <tr>
+        <td>
+          <label for="role">Role:</label>
+        </td>
+        <td>
+          <select name="role">
+            <option value="agent" selected="selected">Agent</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Register User" name="sent"></td>
+      </tr>
+    </table>
+  </form>
   
 </div>
 
