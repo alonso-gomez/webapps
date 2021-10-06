@@ -1,4 +1,20 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?php
+
+// Incluimos la conexión a la BD
+include('connections/conn_localhost.php');
+include('includes/utils.php');
+
+// Validación del formulario
+// Primeramente evaluamos si el formulario ha sido enviado
+if(isset($_POST['sent'])) {
+  // Validación de cajas vacias
+  foreach ($_POST as $calzon => $caca) {
+    if($caca == "" && $calzon != "phone") $error[] = "The field $calzon is required";
+  }
+}
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -34,6 +50,8 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <h2>User register</h2>
   <p>Use the form below to register a new user.</p>
 
+  <?php if(isset($error)) printMsg($error, "error"); ?>
+
   <form action="user-register.php" method="post">
     <table>
       <tr>
@@ -68,7 +86,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
       </tr>
       <tr>
         <td>
-          <label for="role">Role:</label>
+          <label for="role">Role:*</label>
         </td>
         <td>
           <select name="role">
