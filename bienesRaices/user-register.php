@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 // Incluimos la conexión a la BD
 include('connections/conn_localhost.php');
@@ -25,7 +25,7 @@ if(isset($_POST['sent'])) {
     );
 
     // Ejecutamos el query en la BD
-    mysqli_query($connLocalhost, $queryInsertUser) or trigger_error("El query de inserción de datos falló");
+    mysqli_query($connLocalhost, $queryInsertUser) or trigger_error(mysqli_error($connLocalhost), E_USER_ERROR);
 
     // Si todo sale bien (se guardó en la BD), redireccionamos al usuario al Panel de Control
     header("Location:cpanel.php?insertUser=true");
