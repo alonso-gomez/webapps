@@ -11,6 +11,25 @@ if(isset($_POST['sent'])) {
   foreach ($_POST as $calzon => $caca) {
     if($caca == "" && $calzon != "phone") $error[] = "The field $calzon is required";
   }
+
+  // Procedemos a guardar en la base de datos SOLO SI NO HAY ERRORES
+  if(!isset($error)) {
+    // Preparamos la consulta para guardar el registro del usuario en la BD
+    $queryInsertUser = sprintf("INSERT INTO usuarios (name, lastname, email, password, phone, role) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+        mysqli_real_escape_string($connLocalhost, trim($_POST['name'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['lastname'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['email'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['password'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['phone'])),
+        mysqli_real_escape_string($connLocalhost, trim($_POST['role']))
+    );
+
+    // Ejecutamos el query en la BD
+    mysqli_query($connLocalhost, $queryInsertUser) or trigger_error("El query de inserción de datos falló");
+
+    // Si todo sale bien (se guardó en la BD), redireccionamos al usuario al Panel de Control
+    header("Location:cpanel.php?insertUser=true");
+  }
 }
 
 ?>
@@ -50,7 +69,9 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <h2>User register</h2>
   <p>Use the form below to register a new user.</p>
 
-  <?php if(isset($error)) printMsg($error, "error"); ?>
+  <?php if(isset($error)) printMsg($error, "error");
+        if(isset($queryInsertUser)) printMsg($queryInsertUser, "announce");
+   ?>
 
   <form action="user-register.php" method="post">
     <table>
@@ -58,19 +79,19 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
         <td>
           <label for="name">Name:*</label>
         </td>
-        <td><input type="text" name="name"></td>
+        <td><input type="text" name="name" value="<?php echo isset($_POST['name']) ? $_POST['name'] : ""; ?>"></td>
       </tr>
       <tr>
         <td>
           <label for="lastname">Lastname:*</label>
         </td>
-        <td><input type="text" name="lastname"></td>
+        <td><input type="text" name="lastname" value="<?php if(isset($_POST['lastname'])) echo $_POST['lastname']; ?>"></td>
       </tr>
       <tr>
         <td>
           <label for="email">Email:*</label>
         </td>
-        <td><input type="text" name="email"></td>
+        <td><input type="text" name="email" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ""; ?>"></td>
       </tr>
       <tr>
         <td>
@@ -82,7 +103,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
         <td>
           <label for="phone">Phone:</label>
         </td>
-        <td><input type="text" name="phone"></td>
+        <td><input type="text" name="phone" value="<?php echo isset($_POST['phone']) ? $_POST['phone'] : ""; ?>"></td>
       </tr>
       <tr>
         <td>
@@ -90,8 +111,9 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
         </td>
         <td>
           <select name="role">
-            <option value="agent" selected="selected">Agent</option>
-            <option value="admin">Administrator</option>
+            <option value="agent" <?php if(isset($_POST['role']) && $_POST['role'] == "agent") { echo "selected"; } ?>>Agent</option>
+            <option value="admin" <?php if(isset($_POST['role']) && $_POST['role'] == "admin") { echo "selected"; } ?>>Administrator</option>
+            <option value="editor" <?php if(isset($_POST['role']) && $_POST['role'] == "editor") { echo "selected"; } ?>>Editor</option>
           </select>
         </td>
       </tr>
