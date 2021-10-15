@@ -25,10 +25,13 @@ if(isset($_POST['sent'])) {
     );
 
     // Ejecutamos el query en la BD
-    mysqli_query($connLocalhost, $queryInsertUser) or trigger_error(mysqli_error($connLocalhost), E_USER_ERROR);
+    mysqli_query($connLocalhost, $queryInsertUser) or trigger_error("La inserción del registro del usuario ha fallado");
+
+    // Reporte de errores detallado
+    // mysqli_query($connLocalhost, $queryInsertUser) or trigger_error(mysqli_error($connLocalhost), E_USER_ERROR);
 
     // Si todo sale bien (se guardó en la BD), redireccionamos al usuario al Panel de Control
-    header("Location:cpanel.php?insertUser=true");
+    header("Location: cpanel.php?insertUser=true");
   }
 }
 
@@ -62,16 +65,14 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 <!-- HEADER END -->
 
 <?php include("includes/header.php"); ?>
-<div class="txt_navbar" id="navbar"><strong>You are here:</strong> Home
+<div class="txt_navbar" id="navbar"><strong>You are here:</strong> <a href="index.php">Home</a> &raquo; <a href="cpanel.php">Control Panel</a> &raquo; User Register
 </div>
 
 <div id="content" class="txt_content">
   <h2>User register</h2>
   <p>Use the form below to register a new user.</p>
 
-  <?php if(isset($error)) printMsg($error, "error");
-        if(isset($queryInsertUser)) printMsg($queryInsertUser, "announce");
-   ?>
+  <?php if(isset($error)) printMsg($error, "error"); ?>
 
   <form action="user-register.php" method="post">
     <table>

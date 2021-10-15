@@ -610,19 +610,22 @@ h4 {
 .error {
 	padding: 8px;
 	background: #FDA8AB;
-	border: solid 1px #F00;	
+	border: solid 1px #F00;
+	margin: 15px;
 }
 
 .exito {
 	padding: 8px;
 	background: #B6FCAF;
-	border: solid 1px #009900;	
+	border: solid 1px #009900;
+	margin: 15px;
 }
 
 .announce {
 	padding: 8px;
 	background: #F6EF9E;
-	border: solid 1px #FFCC00;	
+	border: solid 1px #FFCC00;
+	margin: 15px;
 }
 
 .death {
