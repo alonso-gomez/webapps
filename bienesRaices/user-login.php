@@ -14,11 +14,26 @@ if(isset($_POST['sent'])) {
   foreach($_POST as $calzon => $caca) {
     if($caca == "") $error[] = "The field $calzon is required";
   }
+
+  // Armamos el query para verificar el email y el password en la BD
+  $queryLogin = sprintf("SELECT id, name, lastname, email, role FROM usuarios WHERE email = '%s' AND password = '%s'",
+      mysqli_real_escape_string($connLocalhost, trim($_POST['email'])),
+      mysqli_real_escape_string($connLocalhost, trim($_POST['password']))
+  );
+
+  // Ejecutamos el query
+  $resQueryLogin = mysqli_query($connLocalhost, $queryLogin) or trigger_error("The user login query failed");
+
+  // Determinamos si el login es valido (email y password coincidentes)
+  // Contamos el recordset (el resultado para un login valido es 1)
+  if(mysqli_num_rows($resQueryLogin)) {
+    // Hacemos un fetch del recordet
+    $userData = mysqli_fetch_assoc($resQueryLogin);
+  } 
 }
 
-// Armamos el query para verificar el email y el password en la BD
-$queryLogin = sprintf("SELECT id, name, lastname, email, role FROM usuarios WHERE email = '%s' AND password = '%s'"
-);
+
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -57,7 +72,11 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <h2>Login</h2>
   <p>Use the form below to login:</p>
 
-  <?php if(isset($error)) printMsg($error, "error"); ?>
+  <?php if(isset($error)) printMsg($error, "error");
+        //var_dump($userData);
+
+        echo $userData['email'];
+   ?>
 
   <form action="user-login.php" method="post">
     <table cellpadding="3">
