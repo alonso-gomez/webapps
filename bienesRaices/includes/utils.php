@@ -17,4 +17,10 @@ function printMsg($msg, $type) {
 	echo "</div>";
 }
 
+// Cierre de sesión
+if(isset($_GET['logout']) && $_GET['logout'] == "true") {
+	session_destroy();
+	header("Location: user-login.php?loggedOut=true");
+}
+
 ?>

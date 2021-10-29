@@ -83,7 +83,10 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <h2>Login</h2>
   <p>Use the form below to login:</p>
 
-  <?php if(isset($error)) printMsg($error, "error"); ?>
+  <?php 
+  if(isset($error)) printMsg($error, "error");
+  if(isset($_GET['loggedOut'])) printMsg("Logged out succesfuly... Come back anytime! :)", "exito");
+  ?>
 
   <form action="user-login.php" method="post">
     <table cellpadding="3">

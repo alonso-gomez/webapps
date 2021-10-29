@@ -2,6 +2,7 @@
 // Inicializamos la sesión o la retomamos
 if(!isset($_SESSION)) {
   session_start();
+  if(!isset($_SESSION['userId'])) header("Location: user-login.php?auth=false");
 }
 
 include('includes/utils.php');
