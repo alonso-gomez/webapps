@@ -2,6 +2,7 @@
 // Inicializamos la sesión o la retomamos
 if(!isset($_SESSION)) {
   session_start();
+  // Verificamos si está definido el indice userId en SESSION, si no lo está quiere decir que el usuario no ha iniciado sesión por lo tanto no puede permanecer en el documento y se le redirecciona
   if(!isset($_SESSION['userId'])) header("Location: user-login.php?auth=false");
 }
 
@@ -40,7 +41,10 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 </div>
 
 <div id="content" class="txt_content">
-  <?php if(isset($_GET['insertUser'])) printMsg("The user was succesfully added", "exito"); ?>
+  <?php 
+  if(isset($_GET['insertUser'])) printMsg("The user was succesfully added", "exito");
+  if(isset($_GET['forbidden'])) printMsg("Access denied", "error");
+  ?>
   
   <h2>Control Panel</h2>
   <p>Use the options below to manage users and properties.</p>
@@ -54,14 +58,17 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <ul>
     <li><a href="#">Add property</a></li>
     <li><a href="#">Manage my properties</a></li>
-    <li><a href="#">Manage other users properties</a></li>
   </ul>
 
-  <h3>Users</h3>
+  <?php
+  if($_SESSION['userRole'] == "admin") { ?>
+  <h3>Admin options</h3>
   <ul>
     <li><a href="user-register.php">Add user</a></li>
     <li><a href="#">Manage users</a></li>
+    <li><a href="#">Manage other users properties</a></li>
   </ul>
+  <?php } ?>
   
 </div>
 

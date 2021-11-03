@@ -1,4 +1,12 @@
 <?php
+// Inicializamos la sesión o la retomamos
+if(!isset($_SESSION)) {
+  session_start();
+  // Verificamos si está definido el indice userId en SESSION, si no lo está quiere decir que el usuario no ha iniciado sesión por lo tanto no puede permanecer en el documento y se le redirecciona
+  if(!isset($_SESSION['userId'])) header("Location: user-login.php?auth=false");
+  // En el caso de este documento que es solo para admins, evaluamos el rol del usuario para determinar "si no es admin", en ese caso lo sacamos del documento
+  if($_SESSION['userRole'] != "admin") header("Location: cpanel.php?forbidden=true");
+}
 
 // Incluimos la conexión a la BD
 include('connections/conn_localhost.php');
