@@ -20,6 +20,24 @@ if(isset($_POST['sent'])) {
     if($caca == "" && $calzon != "phone") $error[] = "The field $calzon is required";
   }
 
+  // Validación de password coincidentes
+  if($_POST['password'] != $_POST['password2']) $error[] = "Both passwords must match";
+
+  // Validación de email
+  // Preparamos la consulta para determinar si el email proporcionado ya existe en la BD
+  // ESTE NO ES UN RECORDSET
+  $queryCheckEmail = sprintf("SELECT id FROM usuarios WHERE email = '%s'",
+    mysqli_real_escape_string($connLocalhost, trim($_POST['email']))
+  );
+
+  // Ejecutamos el query
+  // ESTE ES UN RECORDSET
+  $resQueryCheckEmail = mysqli_query($connLocalhost, $queryCheckEmail)
+    or trigger_error("El query de validación de email falló");
+
+  // Contar el recordset para determinar si se encontró el correo en la BD
+  if(mysqli_num_rows($resQueryCheckEmail)) $error[] = "The given email is already taken";
+
   // Procedemos a guardar en la base de datos SOLO SI NO HAY ERRORES
   if(!isset($error)) {
     // Preparamos la consulta para guardar el registro del usuario en la BD
@@ -107,6 +125,12 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
           <label for="password">Password:*</label>
         </td>
         <td><input type="password" name="password"></td>
+      </tr>
+      <tr>
+        <td>
+          <label for="password2"> Repeat password:*</label>
+        </td>
+        <td><input type="password" name="password2"></td>
       </tr>
       <tr>
         <td>
