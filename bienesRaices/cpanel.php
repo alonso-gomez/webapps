@@ -51,7 +51,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 
   <h3>My Profile</h3>
   <ul>
-    <li><a href="#">Edit my profile</a></li>
+    <li><a href="user-update.php">Edit my profile</a></li>
   </ul>
 
   <h3>Properties</h3>
@@ -65,7 +65,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <h3>Admin options</h3>
   <ul>
     <li><a href="user-register.php">Add user</a></li>
-    <li><a href="#">Manage users</a></li>
+    <li><a href="user-management.php">Manage users</a></li>
     <li><a href="#">Manage other users properties</a></li>
   </ul>
   <?php } ?>
