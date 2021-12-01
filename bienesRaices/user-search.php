@@ -14,17 +14,18 @@ include('includes/utils.php');
 
 // Recuperamos los usuarios de la BD
 // Definimos el query de recuperación de usuarios
-$queryGetUsers = "SELECT name, lastname, email, id FROM usuarios";
+$searchQuery = mysqli_real_escape_string($connLocalhost,trim($_GET['s']));
+$queryUserSearch = "SELECT name, lastname, email, id FROM usuarios WHERE name LIKE '%$searchQuery%' OR lastname LIKE '%$searchQuery%' OR email LIKE '%$searchQuery%'";
 
 // Ejecutamos el query
-$resQueryGetUsers = mysqli_query($connLocalhost, $queryGetUsers)
-  or trigger_error("El query de obtención de todos los usuarios falló");
+$resQueryUserSearch = mysqli_query($connLocalhost, $queryUserSearch)
+  or trigger_error("El query búsqueda de usuarios falló");
 
 // Contamos los resultados obtenidos por la BD
-$totalUsers = mysqli_num_rows($resQueryGetUsers);
+$totalUsers = mysqli_num_rows($resQueryUserSearch);
 
 // Hacemos un fetch del primer resultado
-$usersData = mysqli_fetch_assoc($resQueryGetUsers);
+$usersData = mysqli_fetch_assoc($resQueryUserSearch);
 
 
 ?>
@@ -32,7 +33,7 @@ $usersData = mysqli_fetch_assoc($resQueryGetUsers);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>My San Carlos Vacation - User management </title>
+<title>My San Carlos Vacation - User search </title>
 
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
 
@@ -57,31 +58,34 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
 <!-- HEADER END -->
 
 <?php include("includes/header.php"); ?>
-<div class="txt_navbar" id="navbar"><strong>You are here:</strong> <a href="index.php">Home</a> &raquo; <a href="cpanel.php">Control Panel</a> &raquo; User Management
+<div class="txt_navbar" id="navbar"><strong>You are here:</strong> <a href="index.php">Home</a> &raquo; <a href="cpanel.php">Control Panel</a> &raquo; User Search
 </div>
 
 <div id="content" class="txt_content">
-  <h2>User management</h2>
-  <p>Use the form below to manage all users.</p>
+  <h2>User search results</h2>
+  <?php
+  if($totalUsers == 0) { ?>
+    <div class="announce">Your search query didn't match any value. Please try again.</div>
+  <?php }
+  else { ?>
+    <p>This are your search results.</p>
 
-  <?php 
-  if(isset($error)) printMsg($error, "error");
-  if(isset($_GET['deletedUser'])) printMsg("The user was deleted succesfuly", "exito");
-  ?>
+    <p>Total users: <?php echo $totalUsers; ?></p>
 
-  <p>Total users: <?php echo $totalUsers; ?></p>
-
-  <ul class="listadoUsuarios">
-    <?php 
-    do { ?>
-    <li>
-      <p class="nombreUsuario"><?php echo $usersData['name'].' '.$usersData['lastname']; ?> | <?php echo $usersData['email']; ?></p>
-      <p class="accionesUsuario"><a href="user-update-admin.php?userId=<?php echo $usersData['id'] ;?>">Update</a> | <a href="user-delete.php?userId=<?php echo $usersData['id'] ;?>">Delete</a></p>
-    </li>
-    <?php
-    } while($usersData = mysqli_fetch_assoc($resQueryGetUsers));
-    ?>
-  </ul>
+    <ul class="listadoUsuarios">
+      <?php 
+      do { ?>
+      <li>
+        <p class="nombreUsuario"><?php echo $usersData['name'].' '.$usersData['lastname']; ?> | <?php echo $usersData['email']; ?></p>
+        <p class="accionesUsuario"><a href="user-update-admin.php?userId=<?php echo $usersData['id'] ;?>">Update</a> | <a href="user-delete.php?userId=<?php echo $usersData['id'] ;?>">Delete</a></p>
+      </li>
+      <?php
+      } while($usersData = mysqli_fetch_assoc($resQueryUserSearch));
+      ?>
+    </ul>
+  <?php }?>
+  
+  
   
 </div>
 

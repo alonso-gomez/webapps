@@ -68,6 +68,12 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
     <li><a href="user-management.php">Manage users</a></li>
     <li><a href="#">Manage other users properties</a></li>
   </ul>
+
+  <h3>User search</h3>
+  <p>Use the box below to search for an user for the given search term</p>
+  <form action="user-search.php" method="get">
+    <input type="text" name="s"> <input type="submit" name="search_sent" value="Search User">
+  </form>
   <?php } ?>
   
 </div>
