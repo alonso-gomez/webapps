@@ -6,7 +6,7 @@
 	<title>Sueldo empleado formularios</title>
 </head>
 <body>
-	<h1>Sueldo empleado con formularios.</h1>
+	<h1>Sueldo </h1>
 	<p>Utiliza el siguiente formulario para calcular el sueldo de un empleado.</p>
 
 	<form action="calculo.php" method="post">
