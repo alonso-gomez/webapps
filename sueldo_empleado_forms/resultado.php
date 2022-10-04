@@ -3,6 +3,15 @@
 if(isset($_GET['submit']) && $_GET['submit'] == "Calcular sueldo") {
 	// Continuamos con el resto del script
 
+	// Definimos variables
+	$nombre = $_GET['nombre'];
+	$apellidos = $_GET['apellidos'];
+	$ht = $_GET['ht'];
+
+	// Definimos constantes
+	define("HORA_NORMAL", 20);
+	define("HORA_EXTRA", 40);
+
 	// Evaluamos que las cajas del formulario tengan valor
 	// Recorremos el array GET indice por indice
 	foreach ($_GET as $calzon => $caca) {
@@ -14,35 +23,25 @@ if(isset($_GET['submit']) && $_GET['submit'] == "Calcular sueldo") {
 	if(!is_numeric($ht)) $error[] = "Las horas trabajadas deben de ser un número";
 	if($ht < 0) $error[] = "Las horas trabajadas deben ser un número positivo";
 
-	// Definimos variables
-	$nombre = $_GET['nombre'];
-	$apellidos = $_GET['apellidos'];
-	$ht = $_GET['ht'];
-
-	// Definimos constantes
-	define("HORA_NORMAL", 20);
-	define("HORA_EXTRA", 40);
-
-	// Determinamos si hay horas extras
-	if($ht <= 40) {
-		// El calculo es hace directo
-		$total = $ht * HORA_NORMAL;
-	}
-	else {
-		// Primero determinamos las horas extras trabajadas
-		$he = $ht - 40;
-		$total_hn = (40 * HORA_NORMAL);
-		$total_he = ($he * HORA_EXTRA);
-		$total = $total_hn + $total_he;
+	// Continuamos con el script siempre y cuando estemos exentos de errores
+	if(!isset($error)) {
+		// Determinamos si hay horas extras
+		if($ht <= 40) {
+			// El calculo es hace directo
+			$total = $ht * HORA_NORMAL;
+		}
+		else {
+			// Primero determinamos las horas extras trabajadas
+			$he = $ht - 40;
+			$total_hn = (40 * HORA_NORMAL);
+			$total_he = ($he * HORA_EXTRA);
+			$total = $total_hn + $total_he;
+		}
 	}
 }
 else {
 	header("Location: index.php?error=true");
 }
-
-	
-
-	
 ?>
 <!DOCTYPE html>
 <html lang="en">
