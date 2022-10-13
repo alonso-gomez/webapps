@@ -42,6 +42,22 @@ if(isset($_GET['submit']) && $_GET['submit'] == "Calcular sueldo") {
 else {
 	header("Location: index.php?error=true");
 }
+
+function printMsg($msg,$type){
+	echo "<div class=\"$type\">";
+	if (is_array($msg)) {
+		echo "<ul>";
+		foreach($msg as $caca) {
+			echo "<li>$caca</li>";
+		}
+		echo "</ul>";
+	}
+	else {
+		echo $msg;
+	}
+	echo "</div>";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,6 +65,21 @@ else {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Sueldo de un empleado</title>
+	<style>
+		.error {
+			border: solid 1px red;
+	    padding: 10px;
+	    border-radius: 5px;
+	    background-color: #fdc6d6;
+		}
+
+		.exito {
+			border: solid 1px #21b917;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #d1f5d5;
+		}
+	</style>
 </head>
 <body>
 	<?php
@@ -63,7 +94,12 @@ else {
 		?>
 	<?php }
 	else {
-		print_r($error);
+		//print_r($error);
+		printMsg("Todo salio mal, cambiate de carrera","error");
+		printMsg("Todo salio perfecto","exito");
+		printMsg($error,"error");
+		$mensaje = "Esto es un mensaje en variable";
+		printMsg($mensaje,"exito");
 	}
 
 	?>
