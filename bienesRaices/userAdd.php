@@ -2,7 +2,17 @@
 
 // Incluimos la conexión a la base de datos
 include("connections/conn_localhost.php");
-var_dump($conn_localhost);
+include("includes/utils.php");
+
+// Lo primero que vamos a validar es si el forumulario ha sido enviado o no
+if(isset($_POST['userAddSent'])) {
+  // Vamos a validar que no existan cajas vacias
+  foreach($_POST as $calzon => $caca) {
+    if($caca == '' && $calzon != "telephone" ) $error[] = "The $calzon field is required";
+  }
+
+  
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -41,19 +51,21 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <h2>User Add</h2>
   <p>Please use the form below to add a new user.</p>
 
+  <?php if(isset($error)) printMsg($error,"error"); ?>
+
   <form action="userAdd.php" method="post">
     <table cellpadding="2">
       <tr>
         <td><label for="name">Name:*</label></td>
-        <td><input type="text" name="name"></td>
+        <td><input type="text" name="name" value="<?php if(isset($_POST['name'])) echo $_POST['name']; ?>"></td>
       </tr>
       <tr>
         <td><label for="lastname">Last name:*</label></td>
-        <td><input type="text" name="lastname"></td>
+        <td><input type="text" name="lastname" value="<?php if(isset($_POST['lastname'])) echo $_POST['lastname']; ?>"></td>
       </tr>
       <tr>
         <td><label for="email">Email:*</label></td>
-        <td><input type="text" name="email"></td>
+        <td><input type="text" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email']; ?>"></td>
       </tr>
       <tr>
         <td><label for="password">Password:*</label></td>
@@ -61,7 +73,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
       </tr>
       <tr>
         <td><label for="telephone">Telephone:</label></td>
-        <td><input type="text" name="telephone"></td>
+        <td><input type="text" name="telephone" value="<?php if(isset($_POST['telephone'])) echo $_POST['telephone']; ?>"></td>
       </tr>
       <tr>
         <td></td>
