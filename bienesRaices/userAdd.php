@@ -11,6 +11,27 @@ if(isset($_POST['userAddSent'])) {
     if($caca == '' && $calzon != "telephone" ) $error[] = "The $calzon field is required";
   }
 
+  // Validamos que los passwords coincidan
+  if($_POST['password'] != $_POST['password2']) $error[] = "The password do not match";
+
+  // Si estamos libres de errores, continuamos a insertar el registro en la BD
+  if(!isset($error)) {
+    // Preparamos el query de insercion
+    $queryInsertUser = sprintf("INSERT INTO usuarios (nombre, apellidos, email, password, telefono) VALUES ('%s', '%s', '%s', '%s', '%s')",
+        mysqli_real_escape_string($conn_localhost, trim($_POST['name'])),
+        mysqli_real_escape_string($conn_localhost, trim($_POST['lastname'])),
+        mysqli_real_escape_string($conn_localhost, trim($_POST['email'])),
+        mysqli_real_escape_string($conn_localhost, trim($_POST['password'])),
+        mysqli_real_escape_string($conn_localhost, trim($_POST['telephone']))
+    );
+
+    // Ejecutamos el query
+    mysqli_query($conn_localhost, $queryInsertUser) or trigger_error("El query de inserción de usuarios falló");
+
+    // Redireccionamos al usuario al Panel de Control
+    header("Location: cpanel.php?insertUser=true");
+  }
+
   
 }
 
@@ -70,6 +91,10 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
       <tr>
         <td><label for="password">Password:*</label></td>
         <td><input type="password" name="password"></td>
+      </tr>
+      <tr>
+        <td><label for="password2">Confirm password:*</label></td>
+        <td><input type="password" name="password2"></td>
       </tr>
       <tr>
         <td><label for="telephone">Telephone:</label></td>

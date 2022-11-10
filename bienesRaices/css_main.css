@@ -611,18 +611,21 @@ h4 {
 	padding: 8px;
 	background: #FDA8AB;
 	border: solid 1px #F00;	
+	margin-bottom: 15px;
 }
 
 .exito {
 	padding: 8px;
 	background: #B6FCAF;
 	border: solid 1px #009900;	
+	margin-bottom: 15px;
 }
 
 .announce {
 	padding: 8px;
 	background: #F6EF9E;
-	border: solid 1px #FFCC00;	
+	border: solid 1px #FFCC00;
+	margin-bottom: 15px;
 }
 
 .listadoUsuarios {
