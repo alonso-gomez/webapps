@@ -1,4 +1,9 @@
 ﻿<?php
+  // Inicializamos la sesion o la retomamos
+  if(!isset($_SESSION)) {
+    session_start();
+  }
+
   // Incluimos las utilidades
   include("includes/utils.php");
 ?>
@@ -39,6 +44,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the options below to manage user and properties.</p>
 
   <?php if(isset($_GET['insertUser'])) printMsg("The user was added succesfully","exito"); ?>
+  <?php print_r($_SESSION); ?>
 
   <h3>My Profile</h3>
   <ul>
