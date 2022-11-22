@@ -1,11 +1,13 @@
 ﻿<?php
-  // Inicializamos la sesion o la retomamos
-  if(!isset($_SESSION)) {
-    session_start();
-  }
+// Inicializamos la sesion o la retomamos
+if(!isset($_SESSION)) {
+  session_start();
+  // Protegemos el documento para que solamente los usuarios que HAN INICIADO sesión puedan visualizarlo
+  if(!isset($_SESSION['userId'])) header('Location: login.php?auth=false');
+}
 
-  // Incluimos las utilidades
-  include("includes/utils.php");
+// Incluimos las utilidades
+include("includes/utils.php");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -44,12 +46,20 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the options below to manage user and properties.</p>
 
   <?php if(isset($_GET['insertUser'])) printMsg("The user was added succesfully","exito"); ?>
-  <?php print_r($_SESSION); ?>
+  <?php if(isset($_GET['forbidden'])) printMsg("You don't have enough privileges to access that part of the app","error"); ?>
 
   <h3>My Profile</h3>
   <ul>
     <li><a href="userUpdate.php">Edit my profile</a></li>
   </ul>
+
+  <?php if($_SESSION['userRole'] == "admin") { ?>
+  <h3>Users</h3>
+  <ul>
+    <li><a href="userAdd.php">Add user</a></li>
+    <li><a href="userManagement.php">User management</a></li>
+  </ul>
+  <?php } ?>
 
   <h3>Properties</h3>
   <ul>

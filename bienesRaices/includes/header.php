@@ -23,6 +23,15 @@
    	<li><a href="#">Properties</a></li>           
 </ul>
 </div>
-  <div class="txt_navbar" id="logoff">Welcome <strong>Fulano!!</strong><br />
-      <a href="#">Not you??</a></div>
+  <div class="txt_navbar" id="logoff">
+    <?php if(isset($_SESSION['userId'])) {
+      echo "Welcome <b>{$_SESSION['userFullname']}</b>";
+      echo '<br>';
+      echo '<a href="?logOff=true">Not you?</a>';
+    }
+    else {
+      echo '<a href="login.php">Login</a>';
+    }
+    ?>
+  </div>
 </div>

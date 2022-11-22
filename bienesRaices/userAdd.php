@@ -1,4 +1,12 @@
 ﻿<?php
+// Inicializamos la sesion o la retomamos
+if(!isset($_SESSION)) {
+  session_start();
+  // Protegemos el documento para que solamente los usuarios que HAN INICIADO sesión puedan visualizarlo
+  if(!isset($_SESSION['userId'])) header('Location: login.php?auth=false');
+  // Este documento es solo para administradores, evaluamos el rol del usuario para determinar "si no es admin", en ese caso lo pateamos cordialmente
+  if($_SESSION['userRole'] != "admin") header("Location: cpanel.php?forbidden=true");
+}
 
 // Incluimos la conexión a la base de datos
 include("connections/conn_localhost.php");
@@ -99,6 +107,15 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
       <tr>
         <td><label for="telephone">Telephone:</label></td>
         <td><input type="text" name="telephone" value="<?php if(isset($_POST['telephone'])) echo $_POST['telephone']; ?>"></td>
+      </tr>
+      <tr>
+        <td><label for="rol">Role:*</label></td>
+        <td>
+          <select name="rol">
+            <option value="agent" <?php if(isset($_POST['rol']) && $_POST['rol'] == "agent") echo 'selected="selected"'; ?>>Agent</option>
+            <option value="admin" <?php if(isset($_POST['rol']) && $_POST['rol'] == "admin") echo 'selected="selected"'; ?>>Admin</option>
+          </select>
+        </td>
       </tr>
       <tr>
         <td></td>

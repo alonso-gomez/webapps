@@ -18,7 +18,7 @@
     // Si estamos libres de errores procedemos con la verificación de los datos del usuario
     if(!isset($error)) {
       // Armamos el query para verificar email y password en la BD
-      $queryLogin = sprintf("SELECT id, nombre, apellidos, email FROM usuarios WHERE email = '%s' AND password = '%s'",
+      $queryLogin = sprintf("SELECT id, nombre, apellidos, email, rol FROM usuarios WHERE email = '%s' AND password = '%s'",
           mysqli_real_escape_string($conn_localhost, trim($_POST['email'])),
           mysqli_real_escape_string($conn_localhost, trim($_POST['password']))
       );
@@ -36,6 +36,7 @@
         $_SESSION['userId'] = $userData['id'];
         $_SESSION['userFullname'] = $userData['nombre']." ".$userData["apellidos"];
         $_SESSION['userEmail'] = $userData['email'];
+        $_SESSION['userRole'] = $userData['rol'];
 
         // Redireccionamos al usuario al Panel de Control
         header("Location: cpanel.php");
@@ -84,6 +85,8 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the form below to login.</p>
 
   <?php if(isset($error)) printMsg($error, "error"); ?>
+  <?php if(isset($_GET['auth'])) printMsg("You must login first", "announce"); ?>
+  <?php if(isset($_GET['loggedOff'])) printMsg("Your session has been closed.", "exito"); ?>
 
   <form action="login.php" method="post">
     <table>

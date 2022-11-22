@@ -15,4 +15,10 @@ function printMsg($msg,$type){
 	echo "</div>";
 }
 
+// Cierre de sesión
+if(isset($_GET['logOff']) && $_GET['logOff'] == "true") {
+	session_destroy();
+	header("Location: login.php?loggedOff=true");
+}
+
 ?>
