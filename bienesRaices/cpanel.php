@@ -46,6 +46,7 @@ function MM_jumpMenuGo(objId,targ,restore){ //v9.0
   <p>Please use the options below to manage user and properties.</p>
 
   <?php if(isset($_GET['insertUser'])) printMsg("The user was added succesfully","exito"); ?>
+  <?php if(isset($_GET['updateUser'])) printMsg("Your user profile was updated succesfully","exito"); ?>
   <?php if(isset($_GET['forbidden'])) printMsg("You don't have enough privileges to access that part of the app","error"); ?>
 
   <h3>My Profile</h3>
