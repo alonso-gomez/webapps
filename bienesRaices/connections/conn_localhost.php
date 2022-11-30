@@ -3,7 +3,7 @@
 $servidor = "localhost";
 $baseDatos = "bienes_raices";
 $usuarioBD = "root";
-$passwordBD = "iswguaymas";
+$passwordBD = "root";
 
 // Creamos la conexión
 $conn_localhost = mysqli_connect($servidor, $usuarioBD, $passwordBD) 
